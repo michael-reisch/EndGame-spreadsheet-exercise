@@ -4,11 +4,10 @@ function generateGrid(rows, cols) {
   const table = document.createElement('table')
   const headerRow = document.createElement('tr')
 
-  // Create header cells with column labels A-Z
   for (let col = 0; col <= cols; col++) {
     const headerCell = document.createElement('th')
     if (col > 0) {
-      headerCell.textContent = String.fromCharCode(64 + col) // A is 65 in ASCII
+      headerCell.textContent = String.fromCharCode(64 + col) 
     }
     headerRow.appendChild(headerCell)
   }
@@ -25,7 +24,7 @@ function generateGrid(rows, cols) {
     for (let col = 1; col <= cols; col++) {
       const cell = document.createElement('td')
       const input = document.createElement('input')
-      input.type = 'text'
+      input.type = 'number'
       input.value = ''
       cell.appendChild(input)
       tableRow.appendChild(cell)
