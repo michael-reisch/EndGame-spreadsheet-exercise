@@ -1,3 +1,5 @@
+dataObject = {}
+
 function generateGrid(rows, cols) {
   const table = document.createElement('table')
   const headerRow = document.createElement('tr')
@@ -13,16 +15,13 @@ function generateGrid(rows, cols) {
 
   table.appendChild(headerRow)
 
-  // Create rows with row labels 1-100
   for (let row = 1; row <= rows; row++) {
     const tableRow = document.createElement('tr')
 
-    // Create first cell with row label
     const rowLabelCell = document.createElement('td')
     rowLabelCell.textContent = row
     tableRow.appendChild(rowLabelCell)
 
-    // Create cells for each column with input fields
     for (let col = 1; col <= cols; col++) {
       const cell = document.createElement('td')
       const input = document.createElement('input')
@@ -30,18 +29,29 @@ function generateGrid(rows, cols) {
       input.value = ''
       cell.appendChild(input)
       tableRow.appendChild(cell)
-      cell.addEventListener('click', handleCellClick)
+      cell.addEventListener('change', handleInput)
+      cell.addEventListener('click', getCellCoordinates)
       table.appendChild(tableRow)
     }
   }
   document.body.appendChild(table)
 }
 
-function handleCellClick(event) {
+function handleInput(event) {
+  const inputValue = event.target.value
+  const coordinates = getCellCoordinates(event)
+  console.log(coordinates)
+  dataObject[coordinates] = inputValue
+  console.log(dataObject)
+}
+
+function getCellCoordinates(event) {
+  coordinatesDisplay = document.getElementById('cell_coordinates')
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndexNum = event.target.parentNode.cellIndex
   const colIndex = String.fromCharCode(64 + colIndexNum)
-  console.log(colIndex.concat(rowIndex))
+  coordinatesDisplay.textContent = `${colIndex}${rowIndex}`
+  return colIndex.concat(rowIndex)
 }
 
 generateGrid(100, 26)
