@@ -20,17 +20,17 @@ function createHeaderRow(cols) {
   headerRow.appendChild(createEmptyHeaderCell())
 
   for (let col = 0; col < cols; col++) {
-    headerRow.appendChild(createHeaderCell(col))
+    headerRow.appendChild(createHeaderCells(col))
   }
 
   return headerRow
 }
 
 function createEmptyHeaderCell() {
-  return createHeaderCell(-1, ' ')
+  return createHeaderCells(-1, ' ')
 }
 
-function createHeaderCell(col, columnName = getColumnLabel(col)) {
+function createHeaderCells(col, columnName = getColumnLabel(col)) {
   const headerCell = document.createElement('th')
   headerCell.textContent = columnName
   return headerCell
@@ -92,14 +92,15 @@ function handleInput(event) {
   const inputValue = event.target.value
   const coordinates = getCellCoordinates(event)
   dataObject[coordinates] = inputValue
-  console.log(dataObject)
 }
 
 function getCellCoordinates(event) {
   const coordinatesDisplay = document.getElementById('cell_coordinates')
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnName(event.target.parentNode.cellIndex)
-  coordinatesDisplay.textContent = `${colIndex}${rowIndex}`
+  if (colIndex && rowIndex) {
+    coordinatesDisplay.textContent = `${colIndex}${rowIndex}`
+  }
   return `${colIndex}${rowIndex}`
 }
 
