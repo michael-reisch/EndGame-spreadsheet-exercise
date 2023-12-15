@@ -17,7 +17,7 @@ can be contained in the index.html page.
 with columns labelled A-Z, AA, AB, AC, etc. and rows numbered 1 to 100.
 3. (done) When you click in a cell and enter a number, it should store the number in a JavaScript
 object (note: this would be lost when you refresh the page).
-4. Have a refresh button that redraws the grid (without refreshing the page) and inserts data
+4. (done) Have a refresh button that redraws the grid (without refreshing the page) and inserts data
 into cells where you've saved it.
 5. Add support for some basic formulas. For example if you enter "=A1+A2" into A3 it
 should calculate the sum of these two cells and display the result in A3. Updating A1 would
