@@ -1,80 +1,108 @@
-dataObject = {}
+const MAX_COLS = 100;
+const MAX_ROWS = 100;
+const dataObject = {};
 
 function generateGrid(rows, cols) {
-  const table = document.createElement('table');
+  const table = createTableWithHeader(cols);
+  populateTableWithCells(table, rows, cols);
+  document.body.appendChild(table);
+}
 
-  const headerRow = document.createElement('tr');
-  const columnHeader = document.createElement('th');
-  columnHeader.textContent = ' ';
-  headerRow.appendChild(columnHeader);
+function createTableWithHeader(cols) {
+  const table = document.createElement('table')
+  table.appendChild(createHeaderRow(cols))
+  return table
+}
+
+function createHeaderRow(cols) {
+  const headerRow = document.createElement('tr')
+  headerRow.appendChild(createEmptyHeaderCell())
 
   for (let col = 0; col < cols; col++) {
-    const headerCell = document.createElement('th');
-    let columnName = '';
-
-    let quotient = Math.floor(col / 26);
-    if (quotient > 0) {
-      columnName += String.fromCharCode(64 + quotient);
-    }
-
-    columnName += String.fromCharCode(65 + (col % 26));
-    headerCell.textContent = columnName;
-    headerRow.appendChild(headerCell);
+    headerRow.appendChild(createHeaderCell(col))
   }
 
-  table.appendChild(headerRow);
+  return headerRow
+}
 
+function createEmptyHeaderCell() {
+  return createHeaderCell(-1, ' ')
+}
+
+function createHeaderCell(col, columnName = getColumnLabel(col)) {
+  const headerCell = document.createElement('th')
+  headerCell.textContent = columnName
+  return headerCell
+}
+
+function getColumnLabel(col) {
+  let columnName = ''
+  const quotient = Math.floor(col / 26)
+
+  if (quotient > 0) {
+    columnName += String.fromCharCode(64 + quotient)
+  }
+
+  columnName += String.fromCharCode(65 + (col % 26))
+  return columnName
+}
+
+function populateTableWithCells(table, rows, cols) {
   for (let row = 1; row <= rows; row++) {
-    const tableRow = document.createElement('tr');
-
-    const rowLabelCell = document.createElement('td');
-    rowLabelCell.textContent = row;
-    tableRow.appendChild(rowLabelCell);
+    const tableRow = document.createElement('tr')
+    tableRow.appendChild(createRowLabelCell(row))
 
     for (let col = 1; col <= cols; col++) {
-      const cell = document.createElement('td');
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.value = '';
-      cell.appendChild(input);
-      tableRow.appendChild(cell);
-      cell.addEventListener('change', handleInput);
-      cell.addEventListener('click', getCellCoordinates);
+      tableRow.appendChild(createDataCell(row, col))
     }
 
-    table.appendChild(tableRow);
+    table.appendChild(tableRow)
   }
+}
 
-  document.body.appendChild(table);
+function createRowLabelCell(row) {
+  return createCell('td', row)
+}
+
+function createDataCell(row, col) {
+  const cell = createCell('td')
+  const input = document.createElement('input')
+  input.type = 'text'
+  cell.appendChild(input)
+  cell.addEventListener('change', handleInput)
+  cell.addEventListener('click', getCellCoordinates)
+  return cell
+}
+
+function createCell(cellType, textContent = '') {
+  const cell = document.createElement(cellType)
+  cell.textContent = textContent
+  return cell
 }
 
 function handleInput(event) {
   const inputValue = event.target.value
   const coordinates = getCellCoordinates(event)
-  console.log(coordinates)
   dataObject[coordinates] = inputValue
   console.log(dataObject)
 }
 
 function getCellCoordinates(event) {
-  coordinatesDisplay = document.getElementById('cell_coordinates')
+  const coordinatesDisplay = document.getElementById('cell_coordinates')
   const rowIndex = event.target.parentNode.parentNode.rowIndex
-  const colIndexNum = event.target.parentNode.cellIndex
-  const colIndex = getColumnName(colIndexNum)
+  const colIndex = getColumnName(event.target.parentNode.cellIndex)
   coordinatesDisplay.textContent = `${colIndex}${rowIndex}`
-  return colIndex.concat(rowIndex)
+  return `${colIndex}${rowIndex}`
 }
 
 function getColumnName(colIndex) {
-  console.log(colIndex)
-  let columnName = '';
-  let quotient = Math.floor(colIndex / 26);
-  console.log(quotient)
+  let columnName = ''
+  let quotient = Math.floor(colIndex / 26)
   if (quotient > 0) {
-    columnName += String.fromCharCode(64 + quotient);
+    columnName += String.fromCharCode(64 + quotient)
   }
-  columnName += String.fromCharCode(64 + (colIndex % 26));
-  return columnName;
+  columnName += String.fromCharCode(64 + (colIndex % 26))
+  return columnName
 }
 
 generateGrid(100, 100)
