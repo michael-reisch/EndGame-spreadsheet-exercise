@@ -1,11 +1,12 @@
-const MAX_COLS = 100;
-const MAX_ROWS = 100;
-const dataObject = {};
+MAX_COLS = 100
+MAX_ROWS = 100
 
-function generateGrid(rows, cols) {
-  const table = createTableWithHeader(cols);
-  populateTableWithCells(table, rows, cols);
-  document.body.appendChild(table);
+const dataObject = {}
+
+function generateGrid(rows, cols, existingData) {
+  const table = createTableWithHeader(cols)
+  populateTableWithCells(table, rows, cols, existingData)
+  document.body.appendChild(table)
 }
 
 function createTableWithHeader(cols) {
@@ -47,13 +48,14 @@ function getColumnLabel(col) {
   return columnName
 }
 
-function populateTableWithCells(table, rows, cols) {
+function populateTableWithCells(table, rows, cols, existingData) {
   for (let row = 1; row <= rows; row++) {
     const tableRow = document.createElement('tr')
     tableRow.appendChild(createRowLabelCell(row))
 
     for (let col = 1; col <= cols; col++) {
-      tableRow.appendChild(createDataCell(row, col))
+      const cell = createDataCell(row, col, existingData)
+      tableRow.appendChild(cell)
     }
 
     table.appendChild(tableRow)
@@ -64,10 +66,16 @@ function createRowLabelCell(row) {
   return createCell('td', row)
 }
 
-function createDataCell(row, col) {
+function createDataCell(row, col, existingData) {
   const cell = createCell('td')
   const input = document.createElement('input')
   input.type = 'text'
+  const coordinates = `${getColumnName(col)}${row}`
+
+  if (existingData[coordinates] !== undefined) {
+    input.value = existingData[coordinates]
+  }
+
   cell.appendChild(input)
   cell.addEventListener('change', handleInput)
   cell.addEventListener('click', getCellCoordinates)
@@ -105,4 +113,13 @@ function getColumnName(colIndex) {
   return columnName
 }
 
-generateGrid(100, 100)
+function refreshGrid() {
+  const oldTable = document.querySelector('table')
+  if (oldTable) {
+    document.body.removeChild(oldTable)
+  }
+
+  generateGrid(MAX_ROWS, MAX_COLS, dataObject)
+}
+
+generateGrid(MAX_ROWS, MAX_COLS, dataObject)

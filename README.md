@@ -10,14 +10,14 @@ We are looking to see: how you approach the problem, how you learned new things,
 you solved the problem (or set about to solve it), and as much working code as possible.
 
 # Steps:
-1. Create index.html in your favourite text editor. Use pure JavaScript in your code – no
+1. (done) Create index.html in your favourite text editor. Use pure JavaScript in your code – no
 JavaScript libraries or frameworks. Your JavaScript can either be in a separate .js file, or it
 can be contained in the index.html page.
-2. When loading index.html into Chrome or Firefox, it should draw a 100x100 grid of cells,
+2. (done) When loading index.html into Chrome or Firefox, it should draw a 100x100 grid of cells,
 with columns labelled A-Z, AA, AB, AC, etc. and rows numbered 1 to 100.
-3. When you click in a cell and enter a number, it should store the number in a JavaScript
+3. (done) When you click in a cell and enter a number, it should store the number in a JavaScript
 object (note: this would be lost when you refresh the page).
-4. Have a refresh button that redraws the grid (without refreshing the page) and inserts data
+4. (done) Have a refresh button that redraws the grid (without refreshing the page) and inserts data
 into cells where you've saved it.
 5. Add support for some basic formulas. For example if you enter "=A1+A2" into A3 it
 should calculate the sum of these two cells and display the result in A3. Updating A1 would
