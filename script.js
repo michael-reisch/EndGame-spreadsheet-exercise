@@ -95,12 +95,8 @@ function handleInput(event) {
 }
 
 function getCellCoordinates(event) {
-  const coordinatesDisplay = document.getElementById('cell_coordinates')
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnName(event.target.parentNode.cellIndex)
-  if (colIndex && rowIndex) {
-    coordinatesDisplay.textContent = `${colIndex}${rowIndex}`
-  }
   return `${colIndex}${rowIndex}`
 }
 
