@@ -20,7 +20,6 @@ you solved the problem (or set about to solve it), and as much working code as p
    object (note: this would be lost when you refresh the page).
 4. (done) Have a refresh button that redraws the grid (without refreshing the page) and inserts data
    into cells where you've saved it.
-   -Took me approximately 6 hours to get to this point.
 5. Add support for some basic formulas. For example if you enter "=A1+A2" into A3 it
    should calculate the sum of these two cells and display the result in A3. Updating A1 would
    update A3.

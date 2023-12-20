@@ -78,7 +78,6 @@ function createDataCell(row, col, existingData) {
 
   cell.appendChild(input)
   cell.addEventListener('change', handleInput)
-  // cell.addEventListener('click', getCellCoordinates)
   return cell
 }
 
@@ -91,6 +90,7 @@ function createCell(cellType, textContent = '') {
 function handleInput(event) {
   const inputValue = event.target.value
   const coordinates = getCellCoordinates(event)
+  console.log(coordinates)
 
   if (inputValue.startsWith('=')) {
     try {
@@ -103,6 +103,7 @@ function handleInput(event) {
   } else {
     dataObject[coordinates] = inputValue
   }
+  console.log(dataObject)
 }
 
 function evaluateFormula(formula) {
@@ -138,10 +139,15 @@ function getCellCoordinates(event) {
 function getColumnName(colIndex) {
   let columnName = ''
   let quotient = Math.floor(colIndex / 26)
-  if (quotient > 0) {
-    columnName += String.fromCharCode(64 + quotient)
+  console.log(quotient)
+  if (colIndex !== 26) {
+    if (quotient > 0) {
+      columnName += String.fromCharCode(64 + quotient)
+    }
+    columnName += String.fromCharCode(64 + (colIndex % 26))
+  } else {
+    columnName = 'Z'
   }
-  columnName += String.fromCharCode(64 + (colIndex % 26))
   return columnName
 }
 
