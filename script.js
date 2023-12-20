@@ -79,6 +79,7 @@ function createDataCell(row, col, existingData) {
   }
 
   cell.appendChild(input)
+  input.classList.add('cell')
   cell.addEventListener('change', handleInput)
   return cell
 }

@@ -16,3 +16,7 @@
   z-index: 1;
   border: 1px solid #000;
 }
+
+.cell {
+  text-align: right;
+}
