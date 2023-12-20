@@ -63,7 +63,9 @@ function populateTableWithCells(table, rows, cols, existingData) {
 }
 
 function createRowLabelCell(row) {
-  return createCell('td', row)
+  const cell = createCell('td', row)
+  cell.classList.add('row-label')
+  return cell
 }
 
 function createDataCell(row, col, existingData) {
