@@ -90,13 +90,12 @@ function createCell(cellType, textContent = '') {
 function handleInput(event) {
   const inputValue = event.target.value
   const coordinates = getCellCoordinates(event)
-  console.log(coordinates)
 
   if (inputValue.startsWith('=')) {
     try {
       const result = evaluateFormula(inputValue.substring(1))
       dataObject[coordinates] = result
-      event.target.value = result // Update the input field with the result
+      event.target.value = result
     } catch (error) {
       console.error('Error evaluating formula:', error.message)
     }
@@ -107,22 +106,15 @@ function handleInput(event) {
 }
 
 function evaluateFormula(formula) {
-  // Implement a basic formula evaluator
-  const regex = /[A-Z]+\d+/g // Match cell references like A1, B2, etc.
+  const regex = /[A-Z]+\d+/g
   const cellReferences = formula.match(regex)
-  console.log(cellReferences)
 
   if (cellReferences) {
-    // Replace cell references with their corresponding values
     cellReferences.forEach((reference) => {
       const value = dataObject[reference] || 0
-      console.log(value)
       formula = formula.replace(reference, value)
-      console.log(reference)
-      console.log(formula)
     })
 
-    // Use eval to evaluate the formula
     const result = eval(formula)
     return result
   } else {
@@ -139,7 +131,6 @@ function getCellCoordinates(event) {
 function getColumnName(colIndex) {
   let columnName = ''
   let quotient = Math.floor(colIndex / 26)
-  console.log(quotient)
   if (colIndex !== 26) {
     if (quotient > 0) {
       columnName += String.fromCharCode(64 + quotient)
