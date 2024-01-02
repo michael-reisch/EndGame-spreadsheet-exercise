@@ -1,6 +1,5 @@
 MAX_COLS = 100
 MAX_ROWS = 100
-
 const dataObject = {}
 
 function generateGrid(rows, cols, existingData) {
