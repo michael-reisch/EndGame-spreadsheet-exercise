@@ -1,6 +1,8 @@
 MAX_COLS = 100
 MAX_ROWS = 100
+
 const dataObject = {}
+const formulaDependencies = {}
 
 function generateGrid(rows, cols, existingData) {
   const table = createTableWithHeader(cols)
@@ -80,6 +82,7 @@ function createDataCell(row, col, existingData) {
   cell.appendChild(input)
   input.classList.add('cell')
   cell.addEventListener('change', handleInput)
+  cell.addEventListener('click', checkDependentFormulas)
   return cell
 }
 
@@ -95,6 +98,7 @@ function handleInput(event) {
 
   if (inputValue.startsWith('=')) {
     try {
+      formulaDependencies[coordinates] = splitFormula(inputValue.substring(1))
       const result = evaluateFormula(inputValue.substring(1))
       dataObject[coordinates] = result
       event.target.value = result
@@ -104,7 +108,8 @@ function handleInput(event) {
   } else {
     dataObject[coordinates] = inputValue
   }
-  console.log(dataObject)
+  console.log('dataObject: ', dataObject)
+  console.log('formulaDependencies: ', formulaDependencies)
 }
 
 function evaluateFormula(formula) {
@@ -117,6 +122,7 @@ function evaluateFormula(formula) {
       formula = formula.replace(reference, value)
     })
 
+    // using eval() does pose security risks
     const result = eval(formula)
     return result
   } else {
@@ -124,6 +130,21 @@ function evaluateFormula(formula) {
   }
 }
 
+function splitFormula(formula) {
+  const regex = /([A-Z]+\d+|[+\-*/()])/g
+  return formula.match(regex) || []
+}
+
+function checkDependentFormulas(event) {
+  const coordinates = getCellCoordinates(event)
+  console.log(coordinates)
+  for (const formulaCell in formulaDependencies) {
+    const dependents = formulaDependencies[formulaCell]
+    if (dependents.includes(coordinates)) {
+      console.log('yes, coordinates found')
+    }
+  }
+}
 function getCellCoordinates(event) {
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnName(event.target.parentNode.cellIndex)

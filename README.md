@@ -27,7 +27,8 @@ you solved the problem (or set about to solve it), and as much working code as p
    A11, then it should calculate the sum of all cells in the range and display the result in
    A11. Updating any value in the range would recalculate A11.
 7. Add support for formatting, for example bold, italics and underline
-   Submitting your code
+   
+# Submitting your code
    If you don’t finish all 7 steps, that's ok, but it would be helpful if you could share your plan
    for building out the remaining steps. We're interested in your approach, what is important
    to you, your planning, as well as seeing working code.
