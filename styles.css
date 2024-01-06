@@ -1,5 +1,4 @@
 #cell_coordinates {
-  /* position: fixed; */
   text-align: center;
   top: 10px;
   left: 10px;
@@ -9,10 +8,17 @@
   border-radius: 5px;
 }
 
+.column-label {
+  top: 0;
+  background-color: grey;
+  z-index: 1;
+  border: 1px solid #000;
+}
+
 .row-label {
   position: sticky;
   left: 0;
-  background-color: #fff;
+  background-color: grey;
   z-index: 1;
   border: 1px solid #000;
 }

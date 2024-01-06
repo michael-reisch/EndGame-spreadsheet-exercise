@@ -2,6 +2,7 @@ MAX_COLS = 100
 MAX_ROWS = 100
 
 const dataObject = {}
+const formulaDependencies = {}
 
 function generateGrid(rows, cols, existingData) {
   const table = createTableWithHeader(cols)
@@ -11,6 +12,8 @@ function generateGrid(rows, cols, existingData) {
 
 function createTableWithHeader(cols) {
   const table = document.createElement('table')
+  table.setAttribute('cellspacing', '0')
+  table.setAttribute('cellpadding', '0')
   table.appendChild(createHeaderRow(cols))
   return table
 }
@@ -33,6 +36,7 @@ function createEmptyHeaderCell() {
 function createHeaderCells(col, columnName = getColumnLabel(col)) {
   const headerCell = document.createElement('th')
   headerCell.textContent = columnName
+  headerCell.classList.add('column-label')
   return headerCell
 }
 
@@ -80,7 +84,10 @@ function createDataCell(row, col, existingData) {
 
   cell.appendChild(input)
   input.classList.add('cell')
+  input.id = coordinates
   cell.addEventListener('change', handleInput)
+  input.addEventListener('focus', checkDependentFormulas)
+
   return cell
 }
 
@@ -96,6 +103,7 @@ function handleInput(event) {
 
   if (inputValue.startsWith('=')) {
     try {
+      formulaDependencies[coordinates] = splitFormula(inputValue.substring(1))
       const result = evaluateFormula(inputValue.substring(1))
       dataObject[coordinates] = result
       event.target.value = result
@@ -105,7 +113,6 @@ function handleInput(event) {
   } else {
     dataObject[coordinates] = inputValue
   }
-  console.log(dataObject)
 }
 
 function evaluateFormula(formula) {
@@ -118,6 +125,7 @@ function evaluateFormula(formula) {
       formula = formula.replace(reference, value)
     })
 
+    // using eval() poses security risks
     const result = eval(formula)
     return result
   } else {
@@ -125,6 +133,20 @@ function evaluateFormula(formula) {
   }
 }
 
+function splitFormula(formula) {
+  const regex = /([A-Z]+\d+|[+\-*/()])/g
+  return formula.match(regex) || []
+}
+
+function checkDependentFormulas(event) {
+  const coordinates = getCellCoordinates(event)
+  for (const formulaResultCell in formulaDependencies) {
+    const dependents = formulaDependencies[formulaResultCell]
+    if (dependents.includes(coordinates)) {
+      console.log('This cell is used in a formula in another cell.')
+    }
+  }
+}
 function getCellCoordinates(event) {
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnName(event.target.parentNode.cellIndex)
@@ -132,15 +154,14 @@ function getCellCoordinates(event) {
 }
 
 function getColumnName(colIndex) {
-  let columnName = ''
-  let quotient = Math.floor(colIndex / 26)
-  if (colIndex !== 26) {
-    if (quotient > 0) {
-      columnName += String.fromCharCode(64 + quotient)
-    }
-    columnName += String.fromCharCode(64 + (colIndex % 26))
-  } else {
-    columnName = 'Z'
+  if (colIndex === 26) {
+    return 'Z'
+  }
+  const quotient = Math.floor(colIndex / 26)
+  let columnName = String.fromCharCode(64 + (colIndex % 26))
+
+  if (quotient > 0) {
+    columnName = String.fromCharCode(64 + quotient) + columnName
   }
   return columnName
 }
