@@ -12,6 +12,8 @@ function generateGrid(rows, cols, existingData) {
 
 function createTableWithHeader(cols) {
   const table = document.createElement('table')
+  table.setAttribute('cellspacing', '0')
+  table.setAttribute('cellpadding', '0')
   table.appendChild(createHeaderRow(cols))
   return table
 }
@@ -34,6 +36,7 @@ function createEmptyHeaderCell() {
 function createHeaderCells(col, columnName = getColumnLabel(col)) {
   const headerCell = document.createElement('th')
   headerCell.textContent = columnName
+  headerCell.classList.add('column-label')
   return headerCell
 }
 
@@ -110,12 +113,9 @@ function handleInput(event) {
   } else {
     dataObject[coordinates] = inputValue
   }
-  console.log('dataObject: ', dataObject)
-  console.log('formulaDependencies: ', formulaDependencies)
 }
 
 function evaluateFormula(formula) {
-  console.log(formula)
   const regex = /[A-Z]+\d+/g
   const cellReferences = formula.match(regex)
 
@@ -125,7 +125,7 @@ function evaluateFormula(formula) {
       formula = formula.replace(reference, value)
     })
 
-    // using eval() does pose security risks
+    // using eval() poses security risks
     const result = eval(formula)
     return result
   } else {
@@ -139,12 +139,10 @@ function splitFormula(formula) {
 }
 
 function checkDependentFormulas(event) {
-  console.log(event)
   const coordinates = getCellCoordinates(event)
   for (const formulaResultCell in formulaDependencies) {
     const dependents = formulaDependencies[formulaResultCell]
     if (dependents.includes(coordinates)) {
-      handleInput(event)
       console.log('This cell is used in a formula in another cell.')
     }
   }
@@ -156,15 +154,14 @@ function getCellCoordinates(event) {
 }
 
 function getColumnName(colIndex) {
-  let columnName = ''
-  let quotient = Math.floor(colIndex / 26)
-  if (colIndex !== 26) {
-    if (quotient > 0) {
-      columnName += String.fromCharCode(64 + quotient)
-    }
-    columnName += String.fromCharCode(64 + (colIndex % 26))
-  } else {
-    columnName = 'Z'
+  if (colIndex === 26) {
+    return 'Z'
+  }
+  const quotient = Math.floor(colIndex / 26)
+  let columnName = String.fromCharCode(64 + (colIndex % 26))
+
+  if (quotient > 0) {
+    columnName = String.fromCharCode(64 + quotient) + columnName
   }
   return columnName
 }
