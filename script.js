@@ -81,8 +81,10 @@ function createDataCell(row, col, existingData) {
 
   cell.appendChild(input)
   input.classList.add('cell')
+  input.id = coordinates
   cell.addEventListener('change', handleInput)
-  cell.addEventListener('click', checkDependentFormulas)
+  input.addEventListener('focus', checkDependentFormulas)
+
   return cell
 }
 
@@ -113,6 +115,7 @@ function handleInput(event) {
 }
 
 function evaluateFormula(formula) {
+  console.log(formula)
   const regex = /[A-Z]+\d+/g
   const cellReferences = formula.match(regex)
 
@@ -136,12 +139,13 @@ function splitFormula(formula) {
 }
 
 function checkDependentFormulas(event) {
+  console.log(event)
   const coordinates = getCellCoordinates(event)
-  console.log(coordinates)
-  for (const formulaCell in formulaDependencies) {
-    const dependents = formulaDependencies[formulaCell]
+  for (const formulaResultCell in formulaDependencies) {
+    const dependents = formulaDependencies[formulaResultCell]
     if (dependents.includes(coordinates)) {
-      console.log('yes, coordinates found')
+      handleInput(event)
+      console.log('This cell is used in a formula in another cell.')
     }
   }
 }
