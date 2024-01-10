@@ -86,7 +86,6 @@ function createDataCell(row, col, existingData) {
   input.classList.add('cell')
   input.id = coordinates
   cell.addEventListener('change', handleInput)
-  // input.addEventListener('focus', checkDependentFormulas)
 
   return cell
 }
