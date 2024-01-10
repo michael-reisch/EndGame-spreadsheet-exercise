@@ -135,10 +135,10 @@ function updateCellValue(coordinates, value) {
 
 function findDependentCells(cell) {
   const dependents = []
-  for (const formuaResultCell in formulaDependencies) {
-    const dependencies = formulaDependencies[formuaResultCell]
+  for (const formulaResultCell in formulaDependencies) {
+    const dependencies = formulaDependencies[formulaResultCell]
     if (dependencies.includes(cell)) {
-      dependents.push(formuaResultCell)
+      dependents.push(formulaResultCell)
     }
   }
   return dependents
