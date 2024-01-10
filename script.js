@@ -86,7 +86,7 @@ function createDataCell(row, col, existingData) {
   input.classList.add('cell')
   input.id = coordinates
   cell.addEventListener('change', handleInput)
-  input.addEventListener('focus', checkDependentFormulas)
+  // input.addEventListener('focus', checkDependentFormulas)
 
   return cell
 }
@@ -107,12 +107,42 @@ function handleInput(event) {
       const result = evaluateFormula(inputValue.substring(1))
       dataObject[coordinates] = result
       event.target.value = result
+      updateDependentCellsRecursive(coordinates)
     } catch (error) {
       console.error('Error evaluating formula:', error.message)
     }
   } else {
     dataObject[coordinates] = inputValue
+    updateDependentCellsRecursive(coordinates)
   }
+}
+
+function updateDependentCellsRecursive(changedCell) {
+  const dependents = findDependentCells(changedCell)
+  dependents.forEach((dependent) => {
+    const result = evaluateFormula(formulaDependencies[dependent].join(''))
+    updateCellValue(dependent, result)
+    updateDependentCellsRecursive(dependent)
+  })
+}
+
+function updateCellValue(coordinates, value) {
+  const cell = document.getElementById(coordinates)
+  if (cell) {
+    cell.value = value
+    dataObject[coordinates] = value
+  }
+}
+
+function findDependentCells(cell) {
+  const dependents = []
+  for (const formuaResultCell in formulaDependencies) {
+    const dependencies = formulaDependencies[formuaResultCell]
+    if (dependencies.includes(cell)) {
+      dependents.push(formuaResultCell)
+    }
+  }
+  return dependents
 }
 
 function evaluateFormula(formula) {
@@ -138,15 +168,6 @@ function splitFormula(formula) {
   return formula.match(regex) || []
 }
 
-function checkDependentFormulas(event) {
-  const coordinates = getCellCoordinates(event)
-  for (const formulaResultCell in formulaDependencies) {
-    const dependents = formulaDependencies[formulaResultCell]
-    if (dependents.includes(coordinates)) {
-      console.log('This cell is used in a formula in another cell.')
-    }
-  }
-}
 function getCellCoordinates(event) {
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnName(event.target.parentNode.cellIndex)
