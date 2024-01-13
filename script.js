@@ -169,7 +169,7 @@ function splitFormula(formula) {
 
 function getCellCoordinates(event) {
   const rowIndex = event.target.parentNode.parentNode.rowIndex
-  const colIndex = getColumnName(event.target.parentNode.cellIndex)
+  const colIndex = getColumnLabel(event.target.parentNode.cellIndex - 1)
   return `${colIndex}${rowIndex}`
 }
 
