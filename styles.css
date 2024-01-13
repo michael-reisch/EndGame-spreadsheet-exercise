@@ -9,9 +9,9 @@
 }
 
 .column-label {
+  position: sticky;
   top: 0;
   background-color: grey;
-  z-index: 1;
   border: 1px solid #000;
 }
 
