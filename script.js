@@ -192,6 +192,8 @@ function refreshGrid() {
     document.body.removeChild(oldTable)
   }
 
+  alert('Refreshing grid...')
+
   generateGrid(MAX_ROWS, MAX_COLS, dataObject)
 }
 
