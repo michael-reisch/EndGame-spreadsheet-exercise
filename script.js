@@ -76,7 +76,7 @@ function createDataCell(row, col, existingData) {
   const cell = createCell('td')
   const input = document.createElement('input')
   input.type = 'text'
-  const coordinates = `${getColumnName(col)}${row}`
+  const coordinates = `${getColumnLabel(col)}${row}`
 
   if (existingData[coordinates] !== undefined) {
     input.value = existingData[coordinates]
@@ -171,19 +171,6 @@ function getCellCoordinates(event) {
   const rowIndex = event.target.parentNode.parentNode.rowIndex
   const colIndex = getColumnLabel(event.target.parentNode.cellIndex - 1)
   return `${colIndex}${rowIndex}`
-}
-
-function getColumnName(colIndex) {
-  if (colIndex === 26) {
-    return 'Z'
-  }
-  const quotient = Math.floor(colIndex / 26)
-  let columnName = String.fromCharCode(64 + (colIndex % 26))
-
-  if (quotient > 0) {
-    columnName = String.fromCharCode(64 + quotient) + columnName
-  }
-  return columnName
 }
 
 function refreshGrid() {
