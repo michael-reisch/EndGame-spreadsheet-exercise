@@ -76,7 +76,7 @@ function createDataCell(row, col, existingData) {
   const cell = createCell('td')
   const input = document.createElement('input')
   input.type = 'text'
-  const coordinates = `${getColumnLabel(col)}${row}`
+  const coordinates = `${getColumnLabel(col - 1)}${row}`
 
   if (existingData[coordinates] !== undefined) {
     input.value = existingData[coordinates]
@@ -119,16 +119,16 @@ function handleInput(event) {
 function updateDependentCellsRecursive(changedCell) {
   const dependents = findDependentCells(changedCell)
   dependents.forEach((dependent) => {
+    const formulaCell = document.getElementById(dependent)
     const result = evaluateFormula(formulaDependencies[dependent].join(''))
-    updateCellValue(dependent, result)
+    updateCellValue(dependent, result, formulaCell)
     updateDependentCellsRecursive(dependent)
   })
 }
 
-function updateCellValue(coordinates, value) {
-  const cell = document.getElementById(coordinates)
-  if (cell) {
-    cell.value = value
+function updateCellValue(coordinates, value, cellToUpdate) {
+  if (cellToUpdate) {
+    cellToUpdate.value = value
     dataObject[coordinates] = value
   }
 }
